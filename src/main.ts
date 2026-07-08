@@ -1,6 +1,7 @@
 import roleHarvester from "./role.harvester";
 import roleUpgrader from "./role.upgrader";
 import roleBuilder  from "./role.builder";
+import { CreepRole } from "./role";
 import spawner from "./spawner";
 
 export function loop() {
@@ -17,15 +18,15 @@ export function loop() {
     for (const name in Game.creeps) {
         const creep = Game.creeps[name]!;
 
-        if (creep.memory.role == 'harvester') {
+        if (creep.memory.role == CreepRole.HARVESTER) {
             roleHarvester.run(creep);
         }
 
-        if (creep.memory.role == 'upgrader') {
+        if (creep.memory.role == CreepRole.HARVESTER) {
             roleUpgrader.run(creep);
         }
 
-        if (creep.memory.role == 'builder') {
+        if (creep.memory.role == CreepRole.HARVESTER) {
             roleBuilder.run(creep);   
         }
     }
