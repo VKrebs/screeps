@@ -3,18 +3,6 @@ import roleUpgrader from "./role.upgrader";
 import roleBuilder  from "./role.builder";
 import spawner from "./spawner";
 
-declare global {
-    interface CreepMemory {
-        [name:string]: any;
-        role: string | undefined;
-        state: string | undefined;
-    }
-
-    interface Memory {
-        creeps: {[name: string]: CreepMemory}
-    }
-}
-
 export function loop() {
 
     // Clear non-existing creeps memory
