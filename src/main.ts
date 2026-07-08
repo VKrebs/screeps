@@ -22,11 +22,11 @@ export function loop() {
             roleHarvester.run(creep);
         }
 
-        if (creep.memory.role == CreepRole.HARVESTER) {
+        if (creep.memory.role == CreepRole.UPGRADER) {
             roleUpgrader.run(creep);
         }
 
-        if (creep.memory.role == CreepRole.HARVESTER) {
+        if (creep.memory.role == CreepRole.BUILDER) {
             roleBuilder.run(creep);   
         }
     }
