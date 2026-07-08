@@ -6,7 +6,8 @@
     "outDir": "./dist",
 
     // Environment Settings
-    "module": "nodenext",
+    "module": "es2022",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "types": [ "node", "screeps", "lodash" ],
     "lib": ["esnext"],

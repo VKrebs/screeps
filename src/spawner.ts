@@ -1,4 +1,4 @@
-import * as ld from 'lodash';
+import * as _ from 'lodash';
 import { CreepRole } from './role';
 
 let spawner: {
@@ -15,9 +15,9 @@ export default spawner = {
             return;
         }
 
-        var harvesters = ld.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.HARVESTER)
-        var upgraders = ld.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.UPGRADER)
-        var builders = ld.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.BUILDER)
+        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.HARVESTER)
+        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.UPGRADER)
+        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == CreepRole.BUILDER)
     
         if (harvesters.length < 2) {
             var newName = 'Harvester-' + Game.time;
