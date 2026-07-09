@@ -1,10 +1,10 @@
-let roleUpgrader: {
+let upgrader: {
     run(creep: Creep): void
     harvest(creep: Creep): void
     upgrade(creep: Creep): void
 }
 
-export default roleUpgrader = {
+export default upgrader = {
     run(creep) {
         if (creep.memory.state == undefined)
         {
@@ -27,6 +27,7 @@ export default roleUpgrader = {
         } else if (creep.memory.state == "Harvest") {
             this.harvest(creep)
         } else {
+            
             creep.say("⁉️")
         }
     },

@@ -1,9 +1,9 @@
-import { CreepRole } from "./role";
+import { creepRole } from "./roles/creepRole";
 
 declare global {
     interface CreepMemory {
         [name:string]: any;
-        role: CreepRole;
+        role: creepRole;
         state: string | undefined;
     }
 

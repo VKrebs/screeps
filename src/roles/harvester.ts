@@ -1,10 +1,10 @@
-let roleHarvester: {
+let harvester: {
     run(creep: Creep): void
     harvest(creep: Creep): void
     deliver(creep: Creep): void
 }
 
-export default roleHarvester = {
+export default harvester = {
 
     run(creep) {
         if (creep.memory.state == undefined) {

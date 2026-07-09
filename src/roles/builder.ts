@@ -1,10 +1,10 @@
-let roleBuilder: {
+let builder: {
     run(creep: Creep): void
     build(creep: Creep): void
     harvest(creep: Creep): void
 }
 
-export default roleBuilder = {
+export default builder = {
     run(creep) {
 
         if (creep.memory.state == undefined) {
