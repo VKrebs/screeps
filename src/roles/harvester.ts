@@ -1,56 +1,51 @@
-let harvester: {
-    run(creep: Creep): void
-    harvest(creep: Creep): void
-    deliver(creep: Creep): void
-}
+import { Worker } from "./worker";
 
-export default harvester = {
-
-    run(creep) {
-        if (creep.memory.state == undefined) {
-            creep.memory.state = "Harvest"
-            creep.say("⛏️");
-        }
-            
-        if (creep.memory.state == "Harvest" && creep.store.getFreeCapacity() == 0) {
-            creep.memory.state = "Deliver"
-            creep.say("📨");
+export class Harvester extends Worker {
+    override run(): void {
+        if (this.memory?.state  == undefined) {
+            this.memory.state = "Harvest"
+            this.creep.say("⛏️");
         }
 
-        if (creep.memory.state == "Deliver" && creep.store.getUsedCapacity() == 0) {
-            creep.memory.state = "Harvest"
-            creep.say("⛏️");
+        if (this.memory.state == "Harvest" && this.creep.store.getFreeCapacity() == 0) {
+            this.creep.memory.state = "Deliver"
+            this.creep.say("📨");
         }
 
-        if (creep.memory.state == "Harvest") {
-            this.harvest(creep)
-        } else if (creep.memory.state == "Deliver") {
-            this.deliver(creep)
+        if (this.memory.state == "Deliver" && this.creep.store.getUsedCapacity() == 0) {
+            this.memory.state = "Harvest"
+            this.creep.say("⛏️");
+        }
+
+        if (this.memory.state == "Harvest") {
+            this.harvest()
+        } else if (this.memory.state == "Deliver") {
+            this.deliver()
         } else {
-            creep.say("⁉️")
+            this.creep.say("⁉️")
         }
-    },
+    }
 
-    harvest(creep) {
-        const source = creep.room.find(FIND_SOURCES)[0];
+    harvest(): void {
+        const source = this.creep.room.find(FIND_SOURCES)[0];
             
         if (source == undefined) {
-            creep.say("😴")
+            this.creep.say("😴")
         } else {
-            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(source)
+            if (this.creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(source)
             }    
         }
-    },
+    }
 
-    deliver(creep) {
+    deliver(): void {
         const spawn = Game.spawns['Spawn1'];
 
         if (spawn == undefined) {
-            creep.say("😴")
+            this.creep.say("😴")
         } else {
-            if (creep.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(spawn);
+            if (this.creep.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(spawn);
             }
         }
     }

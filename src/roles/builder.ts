@@ -1,58 +1,53 @@
-let builder: {
-    run(creep: Creep): void
-    build(creep: Creep): void
-    harvest(creep: Creep): void
-}
+import { Worker } from "./worker";
 
-export default builder = {
-    run(creep) {
-
-        if (creep.memory.state == undefined) {
-            creep.memory.state = "Build"
-            creep.say("🏗️");
+export class Builder extends Worker {
+    override run(): void {
+        if (this.memory.state == undefined) {
+            this.memory.state = "Build"
+            this.creep.say("🏗️");
         }
 
-        if (creep.memory.state == "Build" && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.state = "Harvest";
-            creep.say("⛏️");
+        if (this.memory.state == "Build" && this.creep.store[RESOURCE_ENERGY] == 0) {
+            this.memory.state = "Harvest";
+            this.creep.say("⛏️");
         }
 
-        if (creep.memory.state == "Harvest" && creep.store.getFreeCapacity() == 0) {
-            creep.memory.state = "Build"
-            creep.say("🏗️");
+        if (this.memory.state == "Harvest" && this.creep.store.getFreeCapacity() == 0) {
+            this.memory.state = "Build"
+            this.creep.say("🏗️");
         }
 
-        if (creep.memory.state == "Build") {
-            this.build(creep)
-        } else if (creep.memory.state == "Harvest") {
-            this.harvest(creep)
+        if (this.memory.state == "Build") {
+            this.build()
+        } else if (this.memory.state == "Harvest") {
+            this.harvest()
         } else {
-            creep.say("⁉️")
+            this.creep.say("⁉️")
         }
-    },
+    }
 
-    build(creep) {
-         const target = creep.room.find(FIND_CONSTRUCTION_SITES)[0];
+    build() {
+        const target = this.creep.room.find(FIND_CONSTRUCTION_SITES)[0];
 
-            if (target == undefined) {
-                creep.say("😴")
+        if (target == undefined) {
+            this.creep.say("😴")
+        }
+        else {
+            if (this.creep.build(target) == ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' }});
             }
-            else {
-                if (creep.build(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' }});
-                }
-            }
-    },
+        }
+    }
 
-    harvest(creep) {
-        var source = creep.room.find(FIND_SOURCES)[0];
+    harvest() {
+        var source = this.creep.room.find(FIND_SOURCES)[0];
 
-            if (source == undefined) {
-                creep.say("😴")
-            } else {
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
+        if (source == undefined) {
+            this.creep.say("😴")
+        } else {
+            if (this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
+        }
     }
 }

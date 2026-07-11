@@ -1,20 +1,20 @@
-import harvester from "./roles/harvester";
-import upgrader from "./roles/upgrader";
-import builder  from "./roles/builder";
-import { creepRole } from "./roles/creepRole";
 import spawner from "./spawner";
 import constructionManager from "./construction/constructionManager";
+import { WorkersManager } from "./roles/workersManager";
 
 export function loop() {
+    const mainRoom = Game.spawns['Spawn1']?.room;
 
-    // Clear non-existing creeps memory
-    for (const name in Memory.creeps) {
-        if (!Game.creeps[name]) {
+    for (const name  of WorkersManager.workers.keys()){
+        if (!(name in Game.creeps)){
+            WorkersManager.workers.delete(name);
             delete Memory.creeps[name];
         }
     }
 
-    const mainRoom = Game.spawns['Spawn1']?.room;
+    for (const creep of Object.values(Game.creeps)){
+        WorkersManager.getWorker(creep)?.run();
+    }
 
     spawner.spawn('Spawn1')
 
@@ -24,19 +24,5 @@ export function loop() {
         constructionManager.placeContainer(mainRoom);
     }
 
-    for (const name in Game.creeps) {
-        const creep = Game.creeps[name]!;
-
-        if (creep.memory.role == creepRole.HARVESTER) {
-            harvester.run(creep);
-        }
-
-        if (creep.memory.role == creepRole.UPGRADER) {
-            upgrader.run(creep);
-        }
-
-        if (creep.memory.role == creepRole.BUILDER) {
-            builder.run(creep);   
-        }
-    }
+    
 }

@@ -1,57 +1,52 @@
-let upgrader: {
-    run(creep: Creep): void
-    harvest(creep: Creep): void
-    upgrade(creep: Creep): void
-}
+import { Worker } from "./worker"
 
-export default upgrader = {
-    run(creep) {
-        if (creep.memory.state == undefined)
+export class Upgrader extends Worker {
+    override run(): void {
+        if (this.memory.state == undefined)
         {
-            creep.memory.state = "Upgrade"
-            creep.say("🆙")
+            this.memory.state = "Upgrade"
+            this.creep.say("🆙")
         }
 
-        if (creep.memory.state == "Upgrade" && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.state = "Harvest"
-            creep.say("⛏️")
+        if (this.memory.state == "Upgrade" && this.creep.store[RESOURCE_ENERGY] == 0) {
+            this.memory.state = "Harvest"
+            this.creep.say("⛏️")
         }
 
-        if (creep.memory.state == "Harvest" && creep.store.getFreeCapacity() == 0) {
-            creep.memory.state = "Upgrade"
-            creep.say("🆙")
+        if (this.memory.state == "Harvest" && this.creep.store.getFreeCapacity() == 0) {
+            this.memory.state = "Upgrade"
+            this.creep.say("🆙")
         }
 
-        if (creep.memory.state == "Upgrade") {
-            this.upgrade(creep)
-        } else if (creep.memory.state == "Harvest") {
-            this.harvest(creep)
+        if (this.memory.state == "Upgrade") {
+            this.upgrade()
+        } else if (this.memory.state == "Harvest") {
+            this.harvest()
         } else {
-            
-            creep.say("⁉️")
+            this.creep.say("⁉️")
         }
-    },
+    }
 
-    harvest(creep) {
-        const source = creep.room.find(FIND_SOURCES)[0];
+    harvest() {
+        const source = this.creep.room.find(FIND_SOURCES)[0];
 
         if (source == undefined) {
-            creep.say("😴")
+            this.creep.say("😴")
         } else {
-            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(source)
+            if (this.creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(source)
             }    
         }
-    },
+    }
 
-    upgrade(creep) {
-        const controller = creep.room.controller
+    upgrade() {
+        const controller = this.creep.room.controller
 
         if (controller == undefined) {
-            creep.say("😴")
+            this.creep.say("😴")
         } else {
-            if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller)
+            if (this.creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
+                this.creep.moveTo(controller)
             }
         }
     }
