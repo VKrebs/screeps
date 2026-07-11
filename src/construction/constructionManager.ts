@@ -1,23 +1,23 @@
 import * as _ from 'lodash';
+import { Position } from './position';
+import { Area } from './area';
+import { Direction } from './direction'
 
-let buildingManager: {
+let constructionManager: {
     placeExtensions(room: Room): void
-    getNextPosition(x: number, y: number): { x: number, y: number } | String
 }
 
-const constructible_area_upper_left = { x: 19, y: 19}
-const constructible_area_lower_right = { x: 30, y: 30}
+const constructibleArea = new Area(new Position(19, 19), new Position(30, 30))
 
-export default buildingManager = {
+export default constructionManager = {
     placeExtensions(room) {
 
         let shouldConstruct = true;
-        let x = constructible_area_upper_left.x;
-        let y = constructible_area_upper_left.y;
+        let position = new Position(constructibleArea.bottomRight.x, constructibleArea.topLeft.y)
 
         while(shouldConstruct)
         {
-            switch (room.createConstructionSite(x, y, STRUCTURE_EXTENSION)) {
+            switch (room.createConstructionSite(position.x, position.y, STRUCTURE_EXTENSION)) {
                 case ERR_NOT_OWNER:
                     shouldConstruct = false;
                     break;
@@ -31,15 +31,14 @@ export default buildingManager = {
                     shouldConstruct = false;
                     break;
                 case ERR_INVALID_TARGET:
-                    let nextPosition = this.getNextPosition(x, y);
+                    let nextPosition = constructibleArea.nextPositionInArea(position, Direction.TOP_TO_BOTTOM_RIGHT_TO_LEFT);
                     if (nextPosition instanceof String)
                     {
                         shouldConstruct = false;
                     }
                     else
                     {
-                        x = nextPosition.x;
-                        y = nextPosition.y;
+                        position = new Position(nextPosition.x, nextPosition.y)
                     }
                     break
                 case OK:
@@ -48,14 +47,5 @@ export default buildingManager = {
                     break;
             }
         }
-    },
-
-    getNextPosition(x, y) {
-        if (x >= constructible_area_lower_right.x && y >= constructible_area_lower_right.y)
-            return "ERROR"
-        else if (x >= constructible_area_lower_right.x)
-            return { x: constructible_area_upper_left.x, y: y + 1}
-        else
-            return { x: x + 1, y: y }
     }
 }
