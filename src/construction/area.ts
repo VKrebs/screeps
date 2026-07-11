@@ -63,5 +63,10 @@ export class Area {
 
         return "ERR_NOT_IMPL";
     }
+
+    public getNeighbors(position:Position): Position[]
+    {
+        return position.getNeighbors().filter(n => this.isInArea(n))
+    }
 }
 
