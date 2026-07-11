@@ -5,9 +5,11 @@ import { Direction } from './direction';
 
 let constructionManager: {
     placeExtensions(room: Room): void
+    placeContainer(room: Room): void
     getNextBuildablePosition(room: Room): Position | undefined
     isFree(roomPosition: RoomPosition): boolean
     isBuildable(roomPosition: RoomPosition) : boolean
+
 }
 
 const constructibleArea = new Area(new Position(19, 19), new Position(30, 30))
@@ -35,6 +37,29 @@ export default constructionManager = {
        }
        
        room.createConstructionSite(position.x, position.y, STRUCTURE_EXTENSION);
+    },
+
+    
+    placeContainer(room)
+    {
+        const containerConstructionSites = room.find(FIND_CONSTRUCTION_SITES, { filter: (structure) => structure.structureType === STRUCTURE_CONTAINER })
+        
+        if (containerConstructionSites.length > 0)
+            return;
+
+        const builtContainers = room.find(FIND_STRUCTURES, { filter: (structure) => structure.structureType === STRUCTURE_CONTAINER });
+
+        if (builtContainers.length >= 5)
+            return;
+
+        const position = this.getNextBuildablePosition(room);
+
+        if (position == undefined)
+        {
+            return;
+        }
+
+       room.createConstructionSite(position.x, position.y, STRUCTURE_CONTAINER);
     },
 
     isFree(roomPosition) {

@@ -21,6 +21,7 @@ export function loop() {
     if (mainRoom != undefined)
     {
         constructionManager.placeExtensions(mainRoom);
+        constructionManager.placeContainer(mainRoom);
     }
 
     for (const name in Game.creeps) {
