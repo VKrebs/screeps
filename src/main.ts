@@ -3,6 +3,7 @@ import upgrader from "./roles/upgrader";
 import builder  from "./roles/builder";
 import { creepRole } from "./roles/creepRole";
 import spawner from "./spawner";
+import buildingManager from "./constructor";
 
 export function loop() {
 
@@ -13,7 +14,14 @@ export function loop() {
         }
     }
 
+    const mainRoom = Game.spawns['Spawn1']?.room;
+
     spawner.spawn('Spawn1')
+
+    if (mainRoom != undefined)
+    {
+        buildingManager.placeExtensions(mainRoom);
+    }
 
     for (const name in Game.creeps) {
         const creep = Game.creeps[name]!;
